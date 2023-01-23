@@ -1,5 +1,6 @@
 package business.abstracts;
 
+import core.helpers.SlowPrint;
 import entities.abstracts.User;
 
 import java.util.List;
@@ -57,6 +58,9 @@ public abstract class MenuService {
                     select=0;
                     break;
                 case 0:
+                    String message = "===== Okul Yönetim Uygulamamizdan Ayriliyorsunuz =====";
+                    SlowPrint.slowPrint(message, 30);
+                    System.exit(0);
                     break;
                 default:
                     System.out.println("Hatali Giris Yaptiniz...!");

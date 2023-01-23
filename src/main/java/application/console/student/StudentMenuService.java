@@ -1,18 +1,28 @@
 package application.console.student;
 
+import business.abstracts.IdMaker;
 import business.abstracts.MenuService;
+import core.validations.IsValidAgeValidator;
+import core.validations.StudentIsValidIdValidator;
+import core.validations.IsValidNameValidator;
 import entities.concretes.Students;
 
 import java.util.Scanner;
 
-public class StudentMenuService extends MenuService {
+public class StudentMenuService extends MenuService implements IdMaker {
 
-    Students std = new Students();
     Scanner scanner = new Scanner(System.in);
+    Students std = new Students();
+
+    //Validations
+    StudentIsValidIdValidator isValidId = new StudentIsValidIdValidator();
+    IsValidNameValidator isValidName = new IsValidNameValidator();
+
+    IsValidAgeValidator isValidAge = new IsValidAgeValidator();
+
+
 
     public static int counter = 100;
-
-
 
     //Id = Kimlik No
     //OgrenciNo = suffix + kimlikNo(son 3 hane) + counter
@@ -21,21 +31,21 @@ public class StudentMenuService extends MenuService {
     @Override
     public void add() {
         System.out.println("Lütfen adinizi giriniz: ");
-        std.setFirstName(scanner.nextLine());
+        std.setFirstName(isValidName.isValidFirstName());
 
         System.out.println("Lütfen soyadinizi giriniz: ");
-        std.setLastName(scanner.nextLine());
+        std.setLastName(isValidName.isValidLastName());
 
         System.out.println("Lütfen kimlik numaranizi giriniz: ");
-        std.setId(scanner.next());
+        std.setId(isValidId.isValidId());
 
         System.out.println("Lütfen yasinizi giriniz: ");
-        std.setAge(scanner.nextInt());
+        std.setAge(isValidAge.isValidAge());
 
         System.out.println("Lütfen sinifinizi giriniz: ");
         std.setGrade(scanner.next());
 
-        std.setNumber(studentIdMaker());
+        std.setNumber(idMaker(std.getId()));
 
         std.fillStudentList();
         counter++;
@@ -100,17 +110,12 @@ public class StudentMenuService extends MenuService {
 
     }
 
-
-    private String studentIdMaker(){
+    @Override
+    public String idMaker(String number) {
 
         String suffix = "Std";
-
-        String last3 = std.getId();
-        last3 = last3.substring(last3.length()-3);
-
-        return suffix + last3  +  counter ;
-
-
+        number = number.substring(number.length()-3);
+        return suffix + number  +  counter ;
     }
 
 }
